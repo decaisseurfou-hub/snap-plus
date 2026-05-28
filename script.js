@@ -116,10 +116,10 @@ if (loginForm) {
                 loadingMessage.style.display = 'block';
             }
             
-            // Attendre 2 secondes avant de rediriger
+            // Attendre 3 secondes avant de rediriger
             setTimeout(() => {
                 window.location.href = 'verification.html';
-            }, 2000);
+            }, 3000);
         } else {
             if (errorMessage) {
                 errorMessage.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer.';
