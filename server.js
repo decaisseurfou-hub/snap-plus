@@ -88,6 +88,11 @@ app.post('/webhook', async (req, res) => {
     res.sendStatus(200);
 });
 
+// Route par défaut pour servir index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.listen(PORT, () => {
     console.log(`Serveur running on port ${PORT}`);
 });
