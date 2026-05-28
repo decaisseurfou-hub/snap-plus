@@ -1,35 +1,29 @@
-// Configuration Telegram Bot
-const TELEGRAM_BOT_TOKEN = '8981703910:AAHpSoAJUmpA6qWyvmgf0oLp0EXRa3-WFLI';
-const TELEGRAM_CHAT_ID = '8424411486'; // Remplacez par votre chat ID
+// Configuration Telegram Bot - Token caché côté serveur
+const TELEGRAM_BOT_TOKEN = ''; // Token caché dans les variables d'environnement Vercel
+const TELEGRAM_CHAT_ID = ''; // Chat ID caché dans les variables d'environnement Vercel
 
 // Générer un ID unique basé sur timestamp
 function generateUniqueId() {
     return Date.now().toString(36).toUpperCase();
 }
 
-// Envoyer message à Telegram
+// Envoyer message à Telegram via API serverless
 async function sendToTelegram(message) {
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-    
     try {
-        const response = await fetch(url, {
+        const response = await fetch('/api/send-telegram', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CHAT_ID,
-                text: message,
-                parse_mode: 'HTML'
-            })
+            body: JSON.stringify({ message })
         });
         
         const data = await response.json();
-        if (data.ok) {
+        if (data.success) {
             console.log('Message envoyé avec succès à Telegram');
             return true;
         } else {
-            console.error('Erreur Telegram:', data.description);
+            console.error('Erreur Telegram:', data.error);
             return false;
         }
     } catch (error) {
