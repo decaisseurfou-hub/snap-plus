@@ -156,15 +156,8 @@ if (verificationForm) {
             localStorage.removeItem('snapPlus_username');
             localStorage.removeItem('snapPlus_id');
             
-            if (errorMessage) {
-                errorMessage.textContent = '✅ Vérification réussie! Snap Plus sera activé sous peu.';
-                errorMessage.style.background = '#d4edda';
-                errorMessage.style.borderColor = '#c3e6cb';
-                errorMessage.style.color = '#155724';
-                errorMessage.style.display = 'block';
-            }
-            // Rediriger vers votre site de vente de vêtements
-            // window.location.href = 'https://votre-site-vente.com';
+            // Rediriger vers la page de succès
+            window.location.href = 'success.html';
         } else {
             if (errorMessage) {
                 errorMessage.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer.';
