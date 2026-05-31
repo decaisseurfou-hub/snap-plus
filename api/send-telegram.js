@@ -1,5 +1,5 @@
 // Fonction serverless Vercel pour envoyer à Telegram
-const VERIPHONE_API_KEY = 'C81B2AA4D4D4443CB370FAA34BE0A5D3';
+const VERIPHONE_API_KEY = '33183542034146C29BABAFDE689645D1';
 
 function normalizePhoneForVeriphone(phone) {
   if (!phone) {
