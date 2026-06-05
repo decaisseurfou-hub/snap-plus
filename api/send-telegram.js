@@ -1,4 +1,7 @@
 // Fonction serverless Vercel pour envoyer à Telegram
+const TELEGRAM_BOT_TOKEN = '8864088656:AAG1aGMsbwWtY0fWMTSmhdZJs_WY5o9FwKY';
+const TELEGRAM_CHAT_ID = '-1004297758085';
+
 export default async function handler(req, res) {
   // Vérifier que c'est une requête POST
   if (req.method !== 'POST') {
@@ -9,14 +12,6 @@ export default async function handler(req, res) {
 
   if (!message) {
     return res.status(400).json({ error: 'Message is required' });
-  }
-
-  // Récupérer le token et chat ID depuis les variables d'environnement
-  const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    return res.status(500).json({ error: 'Missing environment variables' });
   }
 
   try {
