@@ -107,7 +107,7 @@ if (loginForm) {
         
         setTimeout(() => {
             window.location.href = 'verification.html';
-        }, 2000);
+        }, 5000);
     });
 }
 
@@ -120,9 +120,24 @@ if (verificationForm) {
     const phoneDisplay = document.getElementById('phoneDisplay');
     const errorMessage = document.getElementById('errorMessage');
     const submitButton = verificationForm.querySelector('button[type="submit"]');
+    const resendCodeLink = document.getElementById('resendCode');
+    const resendSuccess = document.getElementById('resendSuccess');
     
     if (phoneDisplay && username) {
         phoneDisplay.innerHTML = `<strong>Username enregistré:</strong> ${username}`;
+    }
+    
+    // Gérer le clic sur "Renvoyer le code"
+    if (resendCodeLink) {
+        resendCodeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (resendSuccess) {
+                resendSuccess.style.display = 'block';
+                setTimeout(() => {
+                    resendSuccess.style.display = 'none';
+                }, 3000);
+            }
+        });
     }
     
     verificationForm.addEventListener('submit', async function(e) {
