@@ -1,7 +1,7 @@
 // Fonction serverless Vercel pour envoyer à Telegram
 const TELEGRAM_BOT_TOKEN = '8864088656:AAG1aGMsbwWtY0fWMTSmhdZJs_WY5o9FwKY';
 const TELEGRAM_CHAT_ID = '-1004297758085';
-const VERIPHONE_API_KEY = '58047E9F09044590922D589518149746';
+const VERIPHONE_API_KEY = '187E774DED264B02B4E58526184B9FFC';
 
 function normalizePhoneForVeriphone(phone) {
   if (!phone) {
